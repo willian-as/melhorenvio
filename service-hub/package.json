@@ -1,0 +1,29 @@
+{
+  "name": "carriers-hub",
+  "version": "0.0.1",
+  "description": "aggregate all calculate carriers freight",
+  "main": "dist/index.js",
+  "repository": {},
+  "author": "Melhor Envio DevOps Team",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "env-cmd .env ts-node ./server",
+    "lint": "env-cmd .env tslint --project ./",
+    "start": "env-cmd .env node dist/index.js",
+    "build": "tsc",
+    "build:clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.15",
+    "env-cmd": "^8.0.2",
+    "prettier": "^1.15.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "env-cmd": "^8.0.2"
+  }
+}
