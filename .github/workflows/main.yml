@@ -7,7 +7,7 @@ on:
     branches: [ main ]
     
     paths:
-      - './**/VERSION'
+      - 'src/**/VERSION'
 
 jobs:
   build:
