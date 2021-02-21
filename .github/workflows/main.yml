@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+    paths:
+      - './**/VERSION'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.23.2]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+       
+      - name: Verifica qual servico foi alterado
+        run: 
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Instalacao das dependencias, compilacao e analise do codigo
+        run: |
+          npm config set package-lock false
+          yarn install
+          yarn run build
+          yarn run lint
+          
+      - name: Login Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.DOCKER_REGISTRY_URL }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        
+      - name: Build and push the images
+        run: |
+          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "VERSION");
+          do
+            folder=${versionFilePath%"/VERSION"}
+            IMAGE_NAME=${folder##*/}
+
+            tmpName="image-$RANDOM"
+            docker build $folder --file $folder/Dockerfile --tag $tmpName
+            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.REPOSITORY }}/$IMAGE_NAME
+            VERSION=$(cat $versionFilePath)
+
+            echo IMAGE_ID=$IMAGE_ID
+            echo VERSION=$VERSION
+
+            docker tag $tmpName $IMAGE_ID:$VERSION
+            docker push $IMAGE_ID:$VERSION
+          done;
