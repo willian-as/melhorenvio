@@ -44,7 +44,7 @@ jobs:
            
             tmpName="image-$RANDOM"
             docker build -t $tmpName .
-            IMAGE_ID="willianabreu/melhorenvio/$IMAGE_NAME"
+            IMAGE_ID="willianabreu/$IMAGE_NAME"
             cd ../..
             VERSION=$(cat "$versionFilePath")
             
