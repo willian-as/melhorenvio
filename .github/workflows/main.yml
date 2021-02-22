@@ -45,7 +45,7 @@ jobs:
             echo IMAGE_ID="$IMAGE_ID"
             echo VERSION="$VERSION"
             
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login "${{ secrets.DOCKER_REGISTRY_URL }"} -u "${{ secrets.DOCKER_USERNAME }"} --password-stdin
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.DOCKER_REGISTRY_URL }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
                         
             docker tag $tmpName "$IMAGE_ID":"$VERSION"
             docker push "$IMAGE_ID":"$VERSION"
