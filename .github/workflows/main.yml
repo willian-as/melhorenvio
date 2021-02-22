@@ -31,6 +31,7 @@ jobs:
             folder=${versionFilePath%"/VERSION"}
             IMAGE_NAME=${folder##*/}
             
+            cd $folder            
             npm config set package-lock false
             yarn install
             yarn run build
