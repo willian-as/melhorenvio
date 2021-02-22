@@ -30,6 +30,8 @@ jobs:
           do
             folder=${versionFilePath%"/VERSION"}
             IMAGE_NAME=${folder##*/}
+            cat $folder
+            cat $IMAGE_NAME
             
             cd $folder            
             npm config set package-lock false
