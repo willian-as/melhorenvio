@@ -30,9 +30,7 @@ jobs:
           do
             folder=${versionFilePath%"/VERSION"}
             IMAGE_NAME=${folder##*/}
-            cat $folder
-            cat $IMAGE_NAME
-            
+                        
             cd $folder            
             npm config set package-lock false
             yarn install
@@ -40,7 +38,7 @@ jobs:
             yarn run lint
            
             tmpName="image-$RANDOM"
-            docker build $folder --file $folder/Dockerfile --tag $tmpName
+            docker build -t $tmpName .
             IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.REPOSITORY }}/$IMAGE_NAME
             VERSION=$(cat $versionFilePath)
 
