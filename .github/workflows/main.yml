@@ -26,12 +26,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies, build, lint and push the image
         run: |
-          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "VERSION");
+          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r "${{ github.sha }"} "${{ github.event.before }"} | grep "VERSION");
           do
             folder=${versionFilePath%"/VERSION"}
             IMAGE_NAME=${folder##*/}
                         
-            cd $folder            
+            cd "$folder"            
             npm config set package-lock false
             yarn install
             yarn run build
@@ -40,13 +40,13 @@ jobs:
             tmpName="image-$RANDOM"
             docker build -t $tmpName .
             IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.REPOSITORY }}/$IMAGE_NAME
-            VERSION=$(cat $versionFilePath)
-
-            echo IMAGE_ID=$IMAGE_ID
-            echo VERSION=$VERSION
+            cd ../..
+            VERSION=$(cat "$versionFilePath")
+            echo IMAGE_ID="$IMAGE_ID"
+            echo VERSION="$VERSION"
             
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.DOCKER_REGISTRY_URL }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login "${{ secrets.DOCKER_REGISTRY_URL }"} -u "${{ secrets.DOCKER_USERNAME }"} --password-stdin
                         
-            docker tag $tmpName $IMAGE_ID:$VERSION
-            docker push $IMAGE_ID:$VERSION
+            docker tag $tmpName "$IMAGE_ID":"$VERSION"
+            docker push "$IMAGE_ID":"$VERSION"
           done;
