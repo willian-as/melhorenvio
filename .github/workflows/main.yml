@@ -26,7 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies, build, lint and push the image
         run: |
-          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r "${{ github.sha }"} "${{ github.event.before }"} | grep "VERSION");
+          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "VERSION");
           do
             folder=${versionFilePath%"/VERSION"}
             IMAGE_NAME=${folder##*/}
